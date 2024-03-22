@@ -22,3 +22,10 @@ class CheckBoxPageLocators:
     CHECKED_ITEMS = (By.CSS_SELECTOR, 'svg.rct-icon-check.rct-icon')
     TITLE_ITEM = ".//ancestor::span[@class='rct-text']"
     OUTPUT_RESULT = (By.CSS_SELECTOR, 'span.text-success')
+
+
+class RadioButtonPageLocators:
+    YES_RADIOBUTTON = (By.CSS_SELECTOR, "label[for='yesRadio']")
+    IMPRESSIVE_RADIOBUTTON = (By.CSS_SELECTOR, "label[for='impressiveRadio']")
+    NO_RADIOBUTTON = (By.CSS_SELECTOR, "label[for='noRadio']")
+    OUTPUT_RESULT = (By.CSS_SELECTOR, 'p span.text-success')
