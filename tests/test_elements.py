@@ -1,6 +1,7 @@
+import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
 
 
 class TestElements:
@@ -35,3 +36,42 @@ class TestElements:
             assert output_yes == 'Yes', "'Yes' have not been selected"
             assert output_impressive == 'Impressive', "'Impressive' have not been selected"
             assert output_no != 'No', "'No' have been selected"
+
+    class TestWebTable:
+        def test_web_table_add_person(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person = web_table_page.add_new_person()
+            table_result = web_table_page.check_new_added_person()
+            assert new_person in table_result, "'new_person' not found in web table"
+
+        def test_web_table_search_person(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person = web_table_page.add_new_person()
+            person_found = web_table_page.check_search_person(
+                new_person[random.randint(0, len(new_person) - 1)])
+            assert person_found, "'person_found' not found in web table by search key_word"
+
+        def test_web_table_update_person_info(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person = web_table_page.add_new_person()
+            update_info = web_table_page.update_person_info()
+            found_updated_person = web_table_page.check_search_person(update_info)
+            assert found_updated_person, "'updated person' not found in web table"
+
+        def test_web_table_delete_person(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person_email = web_table_page.add_new_person()[3]
+            web_table_page.search_person(new_person_email)
+            web_table_page.delete_person()
+            person_deleted = web_table_page.check_deleted_person()
+            assert person_deleted, "'deleted person' found in web table"
+
+        def test_web_table_change_count_row(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            rows_count = web_table_page.select_up_to_some_rows()
+            assert rows_count == [5, 10, 20, 25, 50, 100], "The 'rows count' doesnt match in web table"
