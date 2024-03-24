@@ -63,3 +63,8 @@ class ButtonsPageLocators:
     SUCCESS_DOUBLE_TEXT = (By.CSS_SELECTOR, 'p#doubleClickMessage')
     SUCCESS_RIGHT_TEXT = (By.CSS_SELECTOR, 'p#rightClickMessage')
     SUCCESS_CLICKME_TEXT = (By.XPATH, '//div[3]/button')
+
+
+class LinksPageLocators:
+    SIMPLE_LINK = (By.CSS_SELECTOR, 'a#simpleLink')
+    BAD_REQUEST = (By.CSS_SELECTOR, 'a#bad-request')

@@ -1,7 +1,7 @@
 import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage
 
 
 class TestElements:
@@ -83,3 +83,33 @@ class TestElements:
             assert buttons_page.click_on_double_button(), "'Double click button' haven't been clicked"
             assert buttons_page.click_on_right_click_button(), "'Right click button' haven't been clicked"
             assert buttons_page.click_on_click_me_button(), "'Click me button' haven't been clicked"
+
+    class TestLinksPage:
+        def test_check_links(self, driver):
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            assert links_page.check_new_tab_simple_link(), "'Home' link doesnt match the href url"
+
+        def test_broken_links(self, driver):
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            response_code = links_page.check_broken_link('https://demoqa.com/bad_request')
+            assert response_code == 400
+
+        def test_all_api_calls(self, driver):
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            assert links_page.check_link_status(url='https://demoqa.com/created',
+                                                expected_code=201), "'Created' link doesnt match the 201 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/no-content',
+                                                expected_code=204), "'No Content' link doesnt match the 204 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/moved',
+                                                expected_code=301), "'Moved' link doesnt match the 301 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/bad-request',
+                                                expected_code=400), "'Bad Request' link doesnt match the 400 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/unauthorized',
+                                                expected_code=401), "'Unauthorized' link doesnt match the 401 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/forbidden',
+                                                expected_code=403), "'Forbidden' link doesnt match the 403 status code"
+            assert links_page.check_link_status(url='https://demoqa.com/invalid-url',
+                                                expected_code=404), "'Not Found' link doesnt match the 404 status code"
