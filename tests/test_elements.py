@@ -1,7 +1,7 @@
 import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
 
 
 class TestElements:
@@ -75,3 +75,11 @@ class TestElements:
             web_table_page.open()
             rows_count = web_table_page.select_up_to_some_rows()
             assert rows_count == [5, 10, 20, 25, 50, 100], "The 'rows count' doesnt match in web table"
+
+    class TestButtonsPage:
+        def test_different_click_on_the_buttons(self, driver):
+            buttons_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            buttons_page.open()
+            assert buttons_page.click_on_double_button(), "'Double click button' haven't been clicked"
+            assert buttons_page.click_on_right_click_button(), "'Right click button' haven't been clicked"
+            assert buttons_page.click_on_click_me_button(), "'Click me button' haven't been clicked"

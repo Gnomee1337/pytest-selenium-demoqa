@@ -51,3 +51,15 @@ class WebTablePageLocators:
 
     # search_box
     SEARCH_INPUT = (By.CSS_SELECTOR, 'input#searchBox')
+
+
+class ButtonsPageLocators:
+    # buttons
+    DOUBLE_CLICK_BUTTON = (By.CSS_SELECTOR, 'button#doubleClickBtn')
+    RIGHT_CLICK_BUTTON = (By.CSS_SELECTOR, 'button#rightClickBtn')
+    CLICK_ME_BUTTON = (By.CSS_SELECTOR, 'div.mt-4:nth-child(4n)')
+
+    # results
+    SUCCESS_DOUBLE_TEXT = (By.CSS_SELECTOR, 'p#doubleClickMessage')
+    SUCCESS_RIGHT_TEXT = (By.CSS_SELECTOR, 'p#rightClickMessage')
+    SUCCESS_CLICKME_TEXT = (By.XPATH, '//div[3]/button')
