@@ -1,7 +1,8 @@
 import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, \
+    DownloadAndUploadPage
 
 
 class TestElements:
@@ -113,3 +114,15 @@ class TestElements:
                                                 expected_code=403), "'Forbidden' link doesnt match the 403 status code"
             assert links_page.check_link_status(url='https://demoqa.com/invalid-url',
                                                 expected_code=404), "'Not Found' link doesnt match the 404 status code"
+
+    class TestUploadAndDownloadPage:
+        def test_upload_file(self, driver):
+            download_upload_page = DownloadAndUploadPage(driver, "https://demoqa.com/upload-download")
+            download_upload_page.open()
+            assert download_upload_page.upload_file(), "Uploaded file has not been uploaded 'C:\fakepath'"
+
+        def test_download_file(self, driver):
+            download_upload_page = DownloadAndUploadPage(driver, "https://demoqa.com/upload-download")
+            download_upload_page.open()
+            assert download_upload_page.download_file(), 'Downloaded file has not been downloaded'
+

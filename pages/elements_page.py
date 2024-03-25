@@ -1,10 +1,14 @@
+import base64
+import os
 import random
+import time
+from pathlib import Path
 
 import requests
 
-from generator.generator import generated_person
+from generator.generator import generated_person, generate_file
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators, UploadAndDownloadPageLocators
 from pages.base_page import BasePage
 
 
@@ -206,3 +210,32 @@ class LinksPage(BasePage):
             return True
         else:
             return request_code
+
+
+class DownloadAndUploadPage(BasePage):
+    locators = UploadAndDownloadPageLocators()
+
+    def upload_file(self):
+        file_name, path = generate_file()
+        self.element_is_present(self.locators.UPLOAD_FILE).send_keys(path)
+        os.remove(file_name)
+        uploaded_file_name = file_name.split('\\')[-1]
+        uploaded_result_path = self.element_is_present(self.locators.UPLOADED_FILE_RESULT).text
+        if uploaded_file_name in uploaded_result_path:
+            return True
+        else:
+            return False
+
+    def download_file(self):
+        link = self.element_is_present(self.locators.DOWNLOAD_FILE).get_attribute('href')
+        link_b = base64.b64decode(link)
+        current_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../upload_data'))
+        Path(current_dir).mkdir(parents=True, exist_ok=True)
+        file_name_path = os.path.join(current_dir, f'downloaded_file_test_{random.randint(1, 999)}.jpeg')
+        with open(file_name_path, 'wb+') as downloaded_file:
+            offset = link_b.find(b'\xff\xd8')
+            downloaded_file.write(link_b[offset:])
+            downloaded_file.close()
+        check_file = os.path.exists(file_name_path)
+        os.remove(file_name_path)
+        return check_file
