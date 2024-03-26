@@ -11,4 +11,4 @@ class TestForms:
             filled_info = forms_page.fill_form_fields()
             results = forms_page.forms_result()
             # TODO Verify every field
-            assert results[1] in filled_info
+            assert results[1] in filled_info, 'Filled form info doesnt match result'
