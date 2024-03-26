@@ -12,3 +12,8 @@ class Person:
     department: str
     current_address: str
     permanent_address: str
+    phone_number: str
+
+    def __iter__(self):
+        for attr, value in self.__dict__.items():
+            yield value
