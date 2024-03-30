@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from data.data import Person
+from data.data import Person, Color, Date
 from faker import Faker
 
 faker_ru = Faker("ru_RU")
@@ -35,3 +35,19 @@ def generate_file():
         temp_file.write(f'Hello World{random.randint(0, 999)}')
         temp_file_name = temp_file.name
     return temp_file_name, path
+
+
+def generate_color():
+    yield Color(color_name=["Red", "Blue", "Green", "Yellow", "Purple", "Black", "White", "Voilet", "Indigo", "Magenta",
+                            "Aqua"])
+
+
+# def generate_random_color():
+#     colors = ["Red", "Blue", "Green", "Yellow", "Purple", "Black", "White", "Voilet", "Indigo", "Magenta", "Aqua"]
+#     return colors[random.randint(0, len(colors))]
+
+def generate_date():
+    yield Date(year=faker_en.year(),
+               month=faker_en.month_name(),
+               day=faker_en.day_of_month(),
+               time="12:00", )

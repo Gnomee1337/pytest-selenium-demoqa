@@ -17,3 +17,16 @@ class Person:
     def __iter__(self):
         for attr, value in self.__dict__.items():
             yield value
+
+
+@dataclass
+class Color:
+    color_name: list
+
+
+@dataclass
+class Date:
+    day: str
+    month: str
+    year: str
+    time: str
