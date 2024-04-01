@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(scope='function')
 def driver():
-    adblock_path = r"./AdGuard-AdBlocker.crx"
+    adblock_path = r"./uBlock-Origin.crx"
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_extension(adblock_path)
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)

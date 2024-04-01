@@ -1,12 +1,17 @@
 import random
 import time
 
+import allure
+
 from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, \
     DownloadAndUploadPage, DynamicPropertiesPage
 
 
+@allure.suite("Elements")
 class TestElements:
+    @allure.feature("Text Box Page")
     class TestTextBox:
+        @allure.title("Check text box")
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, "https://demoqa.com/text-box")
             text_box_page.open()
@@ -14,7 +19,9 @@ class TestElements:
             output_data = text_box_page.check_filled_form()
             assert input_data == output_data, "input_data doesnt match output_data in Text Box"
 
+    @allure.feature("Check Box Page")
     class TestCheckBox:
+        @allure.title("Check check box")
         def test_check_box(self, driver):
             check_box_page = CheckBoxPage(driver, "https://demoqa.com/checkbox")
             check_box_page.open()
@@ -24,7 +31,9 @@ class TestElements:
             output_data = check_box_page.get_output_result()
             assert input_data == output_data, 'selected checkboxes doesnt match in Check Box'
 
+    @allure.feature("Radio Button Page")
     class TestRadioButton:
+        @allure.title("Check radio button")
         def test_radio_button(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()
@@ -38,7 +47,9 @@ class TestElements:
             assert output_impressive == 'Impressive', "'Impressive' have not been selected"
             assert output_no != 'No', "'No' have been selected"
 
+    @allure.feature("Web Table Page")
     class TestWebTable:
+        @allure.title("Check add person in web table")
         def test_web_table_add_person(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -46,6 +57,7 @@ class TestElements:
             table_result = web_table_page.check_new_added_person()
             assert new_person in table_result, "'new_person' not found in web table"
 
+        @allure.title("Check search person in web table")
         def test_web_table_search_person(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -54,6 +66,7 @@ class TestElements:
                 new_person[random.randint(0, len(new_person) - 1)])
             assert person_found, "'person_found' not found in web table by search key_word"
 
+        @allure.title("Check update person info in web table")
         def test_web_table_update_person_info(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -62,6 +75,7 @@ class TestElements:
             found_updated_person = web_table_page.check_search_person(update_info)
             assert found_updated_person, "'updated person' not found in web table"
 
+        @allure.title("Check delete person in web table")
         def test_web_table_delete_person(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -71,13 +85,16 @@ class TestElements:
             person_deleted = web_table_page.check_deleted_person()
             assert person_deleted, "'deleted person' found in web table"
 
+        @allure.title("Check change count row in web table")
         def test_web_table_change_count_row(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
             rows_count = web_table_page.select_up_to_some_rows()
             assert rows_count == [5, 10, 20, 25, 50, 100], "The 'rows count' doesnt match in web table"
 
+    @allure.feature("Buttons Page")
     class TestButtonsPage:
+        @allure.title("Check different click on the buttons")
         def test_different_click_on_the_buttons(self, driver):
             buttons_page = ButtonsPage(driver, "https://demoqa.com/buttons")
             buttons_page.open()
@@ -85,18 +102,22 @@ class TestElements:
             assert buttons_page.click_on_right_click_button(), "'Right click button' haven't been clicked"
             assert buttons_page.click_on_click_me_button(), "'Click me button' haven't been clicked"
 
+    @allure.feature("Links Page")
     class TestLinksPage:
+        @allure.title("Check links")
         def test_check_links(self, driver):
             links_page = LinksPage(driver, "https://demoqa.com/links")
             links_page.open()
             assert links_page.check_new_tab_simple_link(), "'Home' link doesnt match the href url"
 
+        @allure.title("Check broken links")
         def test_broken_links(self, driver):
             links_page = LinksPage(driver, "https://demoqa.com/links")
             links_page.open()
             response_code = links_page.check_broken_link('https://demoqa.com/bad_request')
             assert response_code == 400
 
+        @allure.title("Check all api calls")
         def test_all_api_calls(self, driver):
             links_page = LinksPage(driver, "https://demoqa.com/links")
             links_page.open()
@@ -115,30 +136,37 @@ class TestElements:
             assert links_page.check_link_status(url='https://demoqa.com/invalid-url',
                                                 expected_code=404), "'Not Found' link doesnt match the 404 status code"
 
+    @allure.feature("Upload And Download Page")
     class TestUploadAndDownloadPage:
+        @allure.title("Check upload file")
         def test_upload_file(self, driver):
             download_upload_page = DownloadAndUploadPage(driver, "https://demoqa.com/upload-download")
             download_upload_page.open()
             assert download_upload_page.upload_file(), "Uploaded file has not been uploaded 'C:\fakepath'"
 
+        @allure.title("Check download file")
         def test_download_file(self, driver):
             download_upload_page = DownloadAndUploadPage(driver, "https://demoqa.com/upload-download")
             download_upload_page.open()
             assert download_upload_page.download_file(), 'Downloaded file has not been downloaded'
 
+    @allure.feature("Dynamic Properties Page")
     class TestDynamicProperties:
+        @allure.title("Check enable button")
         def test_enable_button(self, driver):
             dynamic_properties_page = DynamicPropertiesPage(driver, "https://demoqa.com/dynamic-properties")
             dynamic_properties_page.open()
             button_is_enabled = dynamic_properties_page.check_button_is_clickable()
             assert button_is_enabled, "'Will enable' button is not clickable"
 
+        @allure.title("Check colour button")
         def test_color_button(self, driver):
             dynamic_properties_page = DynamicPropertiesPage(driver, "https://demoqa.com/dynamic-properties")
             dynamic_properties_page.open()
             color_before, color_after = dynamic_properties_page.check_color_change()
             assert color_before != color_after, "'Color Change' button doesnt change color"
 
+        @allure.title("Check visible after button")
         def test_visible_after_button(self, driver):
             dynamic_properties_page = DynamicPropertiesPage(driver, "https://demoqa.com/dynamic-properties")
             dynamic_properties_page.open()

@@ -4,6 +4,7 @@ import random
 import time
 from pathlib import Path
 
+import allure
 import requests
 from selenium.common import TimeoutException
 
@@ -17,6 +18,7 @@ from pages.base_page import BasePage
 class TextBoxPage(BasePage):
     locators = TextBoxPageLocators()
 
+    @allure.step('check fill all fields')
     def fill_all_fields(self):
         person_info = next(generated_person())
         full_name = person_info.full_name
@@ -32,6 +34,7 @@ class TextBoxPage(BasePage):
 
         return full_name, email, current_address, permanent_address
 
+    @allure.step('check filled form')
     def check_filled_form(self):
         full_name = self.element_is_present(self.locators.CREATED_FULL_NAME).text.split(':')[1]
         email = self.element_is_present(self.locators.CREATED_EMAIL).text.split(':')[1]
@@ -43,9 +46,11 @@ class TextBoxPage(BasePage):
 class CheckBoxPage(BasePage):
     locators = CheckBoxPageLocators()
 
+    @allure.step('check open full list')
     def open_full_list(self):
         self.element_is_visible(self.locators.EXPAND_ALL_BUTTON).click()
 
+    @allure.step('check click random checkbox')
     def click_random_checkbox(self):
         item_list = self.elements_are_visible(self.locators.ITEM_LIST)
         for _ in range(21):
@@ -53,6 +58,7 @@ class CheckBoxPage(BasePage):
             self.go_to_element(item)
             item.click()
 
+    @allure.step('get checked checkboxes')
     def get_checked_checkboxes(self):
         checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
         data = []
@@ -61,6 +67,7 @@ class CheckBoxPage(BasePage):
             data.append(title_item.text)
         return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
 
+    @allure.step('get checkbox output result')
     def get_output_result(self):
         result_list = self.elements_are_present(self.locators.OUTPUT_RESULT)
         data = []
@@ -72,6 +79,7 @@ class CheckBoxPage(BasePage):
 class RadioButtonPage(BasePage):
     locators = RadioButtonPageLocators()
 
+    @allure.step('check click on radio button')
     def click_on_radio_button(self, choice):
         choices = {
             'yes': self.locators.YES_RADIOBUTTON,
@@ -80,6 +88,7 @@ class RadioButtonPage(BasePage):
         }
         self.element_is_visible(choices[choice]).click()
 
+    @allure.step('get radio button output result')
     def get_output_result(self):
         return self.element_is_present(self.locators.OUTPUT_RESULT).text
 
@@ -87,6 +96,7 @@ class RadioButtonPage(BasePage):
 class WebTablePage(BasePage):
     locators = WebTablePageLocators()
 
+    @allure.step('add new person')
     def add_new_person(self, people_count=1):
         for _ in range(people_count):
             person_info = next(generated_person())
@@ -106,6 +116,7 @@ class WebTablePage(BasePage):
             self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
             return [first_name, last_name, str(age), email, str(salary), department]
 
+    @allure.step('check new added person')
     def check_new_added_person(self):
         person_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
         data = []
@@ -115,9 +126,11 @@ class WebTablePage(BasePage):
             data.append(person.text.splitlines())
         return data
 
+    @allure.step('search person')
     def search_person(self, key_word):
         self.element_is_visible(self.locators.SEARCH_INPUT).send_keys(key_word)
 
+    @allure.step('check search person')
     def check_search_person(self, key_word):
         person_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
         for person in person_list:
@@ -125,6 +138,7 @@ class WebTablePage(BasePage):
                 return True
         return False
 
+    @allure.step('update person info')
     def update_person_info(self):
         person_info = next(generated_person())
         new_first_name = person_info.first_name
@@ -137,15 +151,18 @@ class WebTablePage(BasePage):
         self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
         return str(new_first_name)
 
+    @allure.step('delete person')
     def delete_person(self):
         self.element_is_visible(self.locators.DELETE_PERSON_BUTTONS).click()
 
+    @allure.step('check deleted person')
     def check_deleted_person(self):
         if self.element_is_present(self.locators.NO_ROWS_FOUND).text == "No rows found":
             return True
         else:
             return False
 
+    @allure.step('select up to some rows')
     def select_up_to_some_rows(self):
         row_count_presets = [5, 10, 20, 25, 50, 100]
         data = []
@@ -155,6 +172,7 @@ class WebTablePage(BasePage):
             data.append(self.check_count_rows())
         return data
 
+    @allure.step('check count rows')
     def check_count_rows(self):
         list_rows = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
         return len(list_rows)
@@ -163,14 +181,17 @@ class WebTablePage(BasePage):
 class ButtonsPage(BasePage):
     locators = ButtonsPageLocators()
 
+    @allure.step('click on double button')
     def click_on_double_button(self):
         self.action_double_click(self.element_is_visible(self.locators.DOUBLE_CLICK_BUTTON))
         return self.check_clicked_button_result(self.locators.SUCCESS_DOUBLE_TEXT)
 
+    @allure.step('click on right click button')
     def click_on_right_click_button(self):
         self.action_right_click(self.element_is_visible(self.locators.RIGHT_CLICK_BUTTON))
         return self.check_clicked_button_result(self.locators.SUCCESS_RIGHT_TEXT)
 
+    @allure.step('click on click me button')
     def click_on_click_me_button(self):
         click_on_me_button_element = self.element_is_visible(self.locators.CLICK_ME_BUTTON)
         click_on_me_button_element.click()
@@ -183,6 +204,7 @@ class ButtonsPage(BasePage):
 class LinksPage(BasePage):
     locators = LinksPageLocators()
 
+    @allure.step('check new tab simple link')
     def check_new_tab_simple_link(self):
         simple_link = self.element_is_visible(self.locators.SIMPLE_LINK)
         href_link = simple_link.get_attribute('href')
@@ -198,6 +220,7 @@ class LinksPage(BasePage):
         else:
             return request.status_code
 
+    @allure.step('check broken link')
     def check_broken_link(self, url):
         request = requests.get(url)
         if request.status_code == 200:
@@ -205,6 +228,7 @@ class LinksPage(BasePage):
         else:
             return request.status_code
 
+    @allure.step('check link status')
     def check_link_status(self, url, expected_code):
         request = requests.get(url)
         request_code = request.status_code
@@ -217,6 +241,7 @@ class LinksPage(BasePage):
 class DownloadAndUploadPage(BasePage):
     locators = UploadAndDownloadPageLocators()
 
+    @allure.step('upload file')
     def upload_file(self):
         file_name, path = generate_file()
         self.element_is_present(self.locators.UPLOAD_FILE).send_keys(path)
@@ -228,6 +253,7 @@ class DownloadAndUploadPage(BasePage):
         else:
             return False
 
+    @allure.step('download file')
     def download_file(self):
         link = self.element_is_present(self.locators.DOWNLOAD_FILE).get_attribute('href')
         link_b = base64.b64decode(link)
@@ -246,6 +272,7 @@ class DownloadAndUploadPage(BasePage):
 class DynamicPropertiesPage(BasePage):
     locators = DynamicPropertiesPageLocators()
 
+    @allure.step('check color change')
     def check_color_change(self):
         color_button = self.element_is_present(self.locators.COLOR_CHANGE_BUTTON)
         color_button_before = color_button.value_of_css_property('color')
@@ -253,6 +280,7 @@ class DynamicPropertiesPage(BasePage):
         color_button_after = color_button.value_of_css_property('color')
         return color_button_before, color_button_after
 
+    @allure.step('check button appearance')
     def check_button_appearance(self):
         try:
             self.element_is_visible(self.locators.VISIBLE_AFTER_BUTTON, 5)
@@ -260,6 +288,7 @@ class DynamicPropertiesPage(BasePage):
             return False
         return True
 
+    @allure.step('check button is clickable')
     def check_button_is_clickable(self):
         try:
             self.element_is_clickable(self.locators.ENABLE_AFTER_BUTTON, 5)
